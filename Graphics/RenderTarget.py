@@ -55,7 +55,7 @@ class RenderTarget():
             raise RuntimeError("This RenderTarget is not valid, check get_is_valid before using")
         self.framebuffer.use()
         if set_viewport:
-            arcade.set_viewport(0,self.width, 0, self.height)
+            self.framebuffer.viewport = (0, 0, self.width, self.height)
 
     #Clears the framebuffer to a given color, in normalized 0-1 values
     def clear(self, color):

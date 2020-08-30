@@ -88,7 +88,6 @@ class RenderingPipeline():
 
         #blit final result of post-processing to the main viewport
         self.main_window.use()
-        arcade.set_viewport(0,self.render_width, 0, self.render_height)
         self.main_window.clear()
 
         final_output.bind_as_texture(0)
