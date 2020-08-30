@@ -1,5 +1,6 @@
 import arcade
 from .FullscreenQuad import FullscreenQuad
+from .RenderTarget import RenderTarget
 
 class RenderingPipeline():
 
@@ -10,26 +11,12 @@ class RenderingPipeline():
         if height <= 0:
             raise ValueError("height must be greater than zero")
 
-        #Relesase OpenGL resources if they already exist
-        if self.framebuffer_target_texture is not None:
-            self.framebuffer_target_texture.release()
-            self.framebuffer_target_texture = None
-        if self.framebuffer is not None:
-            self.framebuffer.release()
-            self.framebuffer = None
+        #$Release previous render target if allocated
+        if self.render_target is not None:
+            self.render_target.release()
+            self.render_target = None
 
-        #Allocate framebuffer texture
-        self.framebuffer_target_texture = self.context.texture(
-            (width,height),
-            components=4,
-            dtype='f1')
-
-        #Create a framebuffer object with that texture to render to
-        self.framebuffer = self.context.framebuffer(color_attachments=[self.framebuffer_target_texture])
-
-        #Prevents rendering bugs later. Don't know enought about arcade to know why
-        self.framebuffer.use()
-        self.framebuffer.clear()
+        self.render_target = RenderTarget(self.context, width, height)
 
         self.render_width = width
         self.render_height = height
@@ -58,8 +45,7 @@ class RenderingPipeline():
         self.post_processing_chain = None
         self.post_processing_enabled = False
 
-        self.framebuffer_target_texture = None
-        self.framebuffer = None
+        self.render_target = None
 
         self.background_color = (0.5,0.5,0.5,1.0)
 
@@ -85,12 +71,10 @@ class RenderingPipeline():
             self.on_pre_render()
 
         #Set target framebuffer & viewport
-        self.framebuffer.use()
-        arcade.set_viewport(0,self.render_width, 0, self.render_height)
+        self.render_target.bind_as_framebuffer()
 
         #Clear screen before render
-        self.framebuffer.clear(self.background_color, normalized=True)
-
+        self.render_target.clear(self.background_color)
 
         #Execute primary drawing callback
         if self.on_draw_frame is not None:
@@ -105,7 +89,7 @@ class RenderingPipeline():
         arcade.set_viewport(0,self.render_width, 0, self.render_height)
         self.main_window.clear()
 
-        self.framebuffer_target_texture.use(0)
+        self.render_target.bind_as_texture(0)
         self.fullscreen_quad.render(self.blit_program)
 
         #draw post-post processing elements
