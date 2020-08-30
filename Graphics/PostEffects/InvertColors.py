@@ -1,7 +1,7 @@
 
 import arcade
-from .PostProcessingChain import PostProcessingStage
-from .FullscreenQuad import FullscreenQuad
+from ..PostProcessingChain import PostProcessingStage
+from ..FullscreenQuad import FullscreenQuad
 
 class InvertColors(PostProcessingStage):
 

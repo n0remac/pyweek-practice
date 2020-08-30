@@ -4,7 +4,8 @@ Example of Pymunk Physics Engine Platformer
 import arcade
 from Graphics import RenderingPipeline
 from Graphics import PostProcessingChain
-from Graphics.InvertColors import InvertColors
+from Graphics.PostEffects.InvertColors import InvertColors
+from Graphics.PostEffects.TrashChromaticAberration import TrashChromaticAberration
 
 SCREEN_TITLE = "PyMunk Platformer"
 
@@ -35,8 +36,7 @@ class GameWindow(arcade.Window):
         self.post_process = PostProcessingChain.PostProcessingChain(self.ctx, windowSize[0], windowSize[1])
         self.render_pipeline.post_processing_chain = self.post_process
 
-        self.post_process.add_stage(InvertColors(self.ctx))
-        self.post_process.add_stage(InvertColors(self.ctx))
+        self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()
