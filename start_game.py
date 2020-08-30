@@ -3,6 +3,8 @@ Example of Pymunk Physics Engine Platformer
 """
 import arcade
 from Graphics import RenderingPipeline
+from Graphics import PostProcessingChain
+from Graphics.InvertColors import InvertColors
 
 SCREEN_TITLE = "PyMunk Platformer"
 
@@ -21,8 +23,6 @@ class GameWindow(arcade.Window):
         super().__init__(width, height, title)
 
 
-
-
     def setup(self):
         """ Set up everything with the game """
 
@@ -30,11 +30,18 @@ class GameWindow(arcade.Window):
 
         self.render_pipeline = RenderingPipeline.RenderingPipeline(self, windowSize[0], windowSize[1])
         self.render_pipeline.on_draw_frame = self.on_draw_game
+        self.render_pipeline.background_color = (0.1,0.1,0.1,1.0)
 
-        self.mario = arcade.Sprite('Graphics/hello_world.png')
+        self.post_process = PostProcessingChain.PostProcessingChain(self.ctx, windowSize[0], windowSize[1])
+        self.render_pipeline.post_processing_chain = self.post_process
+
+        self.post_process.add_stage(InvertColors(self.ctx))
+        self.post_process.add_stage(InvertColors(self.ctx))
+
+        self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()
-        self.spriteList.append(self.mario)
-        self.mario.scale = 0.25
+        self.spriteList.append(self.hello)
+        self.hello.scale = 0.25
         pass
 
     def on_key_press(self, key, modifiers):
@@ -46,8 +53,8 @@ class GameWindow(arcade.Window):
         pass
 
     def on_mouse_motion(self, x, y, dx, dy):
-        self.mario.center_x = x
-        self.mario.center_y = y
+        self.hello.center_x = x
+        self.hello.center_y = y
 
     def on_update(self, delta_time):
         """ Movement and game logic """

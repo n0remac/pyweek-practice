@@ -21,11 +21,8 @@ class RenderingPipeline():
         self.render_width = width
         self.render_height = height
 
-        #TODO: Resise post processing chain
         if self.post_processing_chain is not None:
-            pass
-
-        pass
+            self.post_processing_chain.resize_chain(width,height)       
 
 
     def __init__(self, window, width, height):
@@ -82,14 +79,19 @@ class RenderingPipeline():
         else:
             pass
 
+        self.context.enable_only()
+
         #execute post-processing chain
+        final_output = self.render_target
+        if self.post_processing_chain is not None:
+            final_output = self.post_processing_chain.apply_chain(final_output)
 
         #blit final result of post-processing to the main viewport
         self.main_window.use()
         arcade.set_viewport(0,self.render_width, 0, self.render_height)
         self.main_window.clear()
 
-        self.render_target.bind_as_texture(0)
+        final_output.bind_as_texture(0)
         self.fullscreen_quad.render(self.blit_program)
 
         #draw post-post processing elements
