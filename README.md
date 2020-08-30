@@ -6,7 +6,7 @@ A practice project for Pyweek 30. We will be following this tutorial: https://ar
 Install pipenv  
 `pip3 install pipenv`  
 Install python 3 and arcade dependancies  
-`apt update && sudo apt install -y python3-dev python3-pip libjpeg-dev zlib1g-dev`  
+`sudo apt update && sudo apt install -y python3-dev python3-pip libjpeg-dev zlib1g-dev`  
 Clone this repository  
 `git clone https://github.com/n0remac/pyweek-practice.git`  
 From pyweek-practice directory initialize the virtual environment  
