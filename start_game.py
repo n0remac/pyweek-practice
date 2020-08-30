@@ -37,6 +37,9 @@ class GameWindow(arcade.Window):
         self.render_pipeline.post_processing_chain = self.post_process
 
         self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
+        self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
+        self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
+        self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()

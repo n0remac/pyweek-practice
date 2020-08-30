@@ -51,6 +51,8 @@ class RenderingPipeline():
         self.fullscreen_quad = FullscreenQuad(self.context)
         self.blit_program = self.__load_blit_program()
 
+        self.debug_rt = None
+
     #Create a OpenGL program to blit one framebuffer onto another
     def __load_blit_program(self):
 
@@ -85,6 +87,9 @@ class RenderingPipeline():
         final_output = self.render_target
         if self.post_processing_chain is not None:
             final_output = self.post_processing_chain.apply_chain(final_output)
+
+        if self.debug_rt is not None:
+            final_output = self.debug_rt
 
         #blit final result of post-processing to the main viewport
         self.main_window.use()
