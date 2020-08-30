@@ -26,10 +26,10 @@ class TestLightingController():
 
         #Ensure we have a buffer and that it is the correct size
         if self.light_buffer is None:
-            self.light_buffer = RenderTarget(context, width, height)
+            self.light_buffer = RenderTarget(context, width, height, 'f2')
         elif (self.light_buffer.width != width or self.light_buffer.height != height):
             self.light_buffer.release()
-            self.light_buffer = RenderTarget(context, width, height)
+            self.light_buffer = RenderTarget(context, width, height, 'f2')
 
         #Bind and clear light buffer to the ambient light color
         self.light_buffer.bind_as_framebuffer()

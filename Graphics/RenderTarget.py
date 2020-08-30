@@ -3,7 +3,7 @@ import arcade
 
 class RenderTarget():
 
-    def __init__(self,context, width, height): #TODO: Optional format settings
+    def __init__(self,context, width, height, data_type='f1'): #TODO: Optional format settings
         if width <= 0:
             raise ValueError("width must be greater than zero")
         if height <= 0:
@@ -13,7 +13,7 @@ class RenderTarget():
         self.framebuffer_target_texture = context.texture(
             (width,height),
             components=4,
-            dtype='f1')
+            dtype=data_type)
 
         #Create a framebuffer object with that texture to render to
         self.framebuffer = context.framebuffer(color_attachments=[self.framebuffer_target_texture])

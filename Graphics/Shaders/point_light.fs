@@ -15,6 +15,6 @@ void main() {
     float distanceToLight = length(v_distance);
     float ultraJankFalloff = 1.0 - (distanceToLight / u_radius);
 
-    fragColor = lightColor * ultraJankFalloff;
+    fragColor = max(vec4(0.0), lightColor * ultraJankFalloff);
     //fragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
