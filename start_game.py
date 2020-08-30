@@ -2,6 +2,7 @@
 Example of Pymunk Physics Engine Platformer
 """
 import arcade
+from Graphics import RenderingPipeline
 
 SCREEN_TITLE = "PyMunk Platformer"
 
@@ -19,8 +20,21 @@ class GameWindow(arcade.Window):
         # Init the parent class
         super().__init__(width, height, title)
 
+
+
+
     def setup(self):
         """ Set up everything with the game """
+
+        windowSize = self.get_size()
+
+        self.render_pipeline = RenderingPipeline.RenderingPipeline(self, windowSize[0], windowSize[1])
+        self.render_pipeline.on_draw_frame = self.on_draw_game
+
+        self.mario = arcade.Sprite('Graphics/hello_world.png')
+        self.spriteList = arcade.SpriteList()
+        self.spriteList.append(self.mario)
+        self.mario.scale = 0.25
         pass
 
     def on_key_press(self, key, modifiers):
@@ -31,13 +45,21 @@ class GameWindow(arcade.Window):
         """Called when the user releases a key. """
         pass
 
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.mario.center_x = x
+        self.mario.center_y = y
+
     def on_update(self, delta_time):
         """ Movement and game logic """
         pass
 
     def on_draw(self):
         """ Draw everything """
-        arcade.start_render()
+        self.render_pipeline.draw_frame()
+
+    def on_draw_game(self):
+        self.spriteList.draw()
+        pass
 
 def main():
     """ Main method """
