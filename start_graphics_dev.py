@@ -9,6 +9,7 @@ from Graphics.TestLightingController import TestLightingController
 from Graphics.PostEffects.InvertColors import InvertColors
 from Graphics.PostEffects.TrashChromaticAberration import TrashChromaticAberration
 from Graphics.PostEffects.Bloom import Bloom
+from Graphics.PostEffects.Tonemap import Tonemap
 
 SCREEN_TITLE = "PyMunk Platformer"
 
@@ -41,18 +42,20 @@ class GameWindow(arcade.Window):
 
         #Create lighting controller
         self.lighting = TestLightingController(self.ctx)
-        self.lighting.ambient_light = (0.05,0.05,0.05,1.0)
+        self.lighting.ambient_light = (0.1,0.1,0.1,1.0)
         #Make sure to add the lighting post processing as the first stage
-        #self.post_process.add_stage(self.lighting.get_apply_light_stage())
+        self.post_process.add_stage(self.lighting.get_apply_light_stage())
 
         #add other nonsense because why not
         #self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
 
         #add some bloom
-        self.bloom = Bloom(self.ctx, 15, 2.0, 0.4, 1.0)
+        self.bloom = Bloom(self.ctx, 15, 3.0, 2.5, 1.0)
         self.post_process.add_stage(self.bloom)
 
-        #TODO: Add a tonemap stage after the bloom
+        #Add a tonemap stage after the bloom
+        self.post_process.add_stage(Tonemap(self.ctx))
+
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()
@@ -72,11 +75,11 @@ class GameWindow(arcade.Window):
         
 
 
-        self.lightA = self.lighting.create_point_light((200,200),128, (4.0,4.0,4.0,4.0) )
+        self.lightA = self.lighting.create_point_light((200,200),128, (3.0,3.0,3.0,3.0) )
 
-        self.lighting.create_point_light((150,150),196, (4.0,0.0,0.0,1.0) )
-        self.lighting.create_point_light((275,300),196, (0.0,4.0,0.0,1.0) )
-        self.lighting.create_point_light((400,150),196, (0.0,0.0,4.0,1.0) )
+        self.lighting.create_point_light((150,150),196, (2.0,0.0,0.0,1.0) )
+        self.lighting.create_point_light((275,300),196, (0.0,2.0,0.0,1.0) )
+        self.lighting.create_point_light((400,150),196, (0.0,0.0,2.0,1.0) )
 
 
     def on_key_press(self, key, modifiers):
