@@ -73,8 +73,12 @@ class GameWindow(arcade.Window):
 
         self.hello = arcade.Sprite("Graphics/hello_world.png")
         self.spriteList = arcade.SpriteList()
-        self.spriteList.append(self.hello)
+        # self.spriteList.append(self.hello)
         self.hello.scale = 0.25
+
+        # Create the sprite lists
+        self.player_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
 
         # Read in the tiled map
         map_name = ":resources:tmx_maps/map.tmx"
@@ -82,12 +86,28 @@ class GameWindow(arcade.Window):
         self.wall_list = arcade.tilemap.process_layer(
             my_map, "Platforms", SPRITE_SCALING_TILES
         )
+        self.item_list = arcade.tilemap.process_layer(
+            my_map, "Dynamic Items", SPRITE_SCALING_TILES
+        )
+
+        # Create player sprite
+        self.player_sprite = arcade.Sprite(
+            ":resources:images/animated_characters/female_person/femalePerson_idle.png",
+            SPRITE_SCALING_PLAYER,
+        )
+        # Set player location
+        grid_x = 1
+        grid_y = 1
+        self.player_sprite.center_x = SPRITE_SIZE * grid_x + SPRITE_SIZE / 2
+        self.player_sprite.center_y = SPRITE_SIZE * grid_y + SPRITE_SIZE / 2
+        # Add to player sprite list
+        self.player_list.append(self.player_sprite)
 
         # Sprites can be added to to the spriteList to be put through the post processor
-        '''
+        """
         for w in self.wall_list:
             self.spriteList.append(w)
-        '''
+        """
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -109,6 +129,9 @@ class GameWindow(arcade.Window):
         """ Draw everything """
         self.render_pipeline.draw_frame()
         self.wall_list.draw()
+        self.bullet_list.draw()
+        self.item_list.draw()
+        self.player_list.draw()
 
     def on_draw_game(self):
         self.spriteList.draw()
