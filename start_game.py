@@ -79,9 +79,13 @@ class GameWindow(arcade.Window):
         # Read in the tiled map
         map_name = ":resources:tmx_maps/map.tmx"
         my_map = arcade.tilemap.read_tmx(map_name)
-        self.wall_list = arcade.tilemap.process_layer(
+        wall_list = arcade.tilemap.process_layer(
             my_map, "Platforms", SPRITE_SCALING_TILES
         )
+
+        # Add wall_list to spritList
+        for w in wall_list:
+            self.spriteList.append(w)
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -102,7 +106,6 @@ class GameWindow(arcade.Window):
     def on_draw(self):
         """ Draw everything """
         self.render_pipeline.draw_frame()
-        self.wall_list.draw()
 
     def on_draw_game(self):
         self.spriteList.draw()
