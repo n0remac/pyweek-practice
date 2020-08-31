@@ -50,11 +50,11 @@ class GameWindow(arcade.Window):
         #self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
 
         #add some bloom
-        self.bloom = Bloom(self.ctx, 15, 3.0, 2.5, 1.0)
+        self.bloom = Bloom(self.ctx, 15, 3.0, 2.0, 1.0)
         self.post_process.add_stage(self.bloom)
 
         #Add a tonemap stage after the bloom
-        self.post_process.add_stage(Tonemap(self.ctx))
+        self.post_process.add_stage(Tonemap(self.ctx, 1.5))
 
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
