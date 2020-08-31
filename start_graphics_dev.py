@@ -8,6 +8,7 @@ from Graphics.TestLightingController import TestLightingController
 
 from Graphics.PostEffects.InvertColors import InvertColors
 from Graphics.PostEffects.TrashChromaticAberration import TrashChromaticAberration
+from Graphics.PostEffects.Bloom import Bloom
 
 SCREEN_TITLE = "PyMunk Platformer"
 
@@ -42,10 +43,16 @@ class GameWindow(arcade.Window):
         self.lighting = TestLightingController(self.ctx)
         self.lighting.ambient_light = (0.05,0.05,0.05,1.0)
         #Make sure to add the lighting post processing as the first stage
-        self.post_process.add_stage(self.lighting.get_apply_light_stage())
+        #self.post_process.add_stage(self.lighting.get_apply_light_stage())
 
         #add other nonsense because why not
-        self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
+        #self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
+
+        #add some bloom
+        self.bloom = Bloom(self.ctx, 15, 2.0, 0.4, 1.0)
+        self.post_process.add_stage(self.bloom)
+
+        #TODO: Add a tonemap stage after the bloom
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()
