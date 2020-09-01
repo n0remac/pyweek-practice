@@ -1,4 +1,6 @@
 import arcade
+from typing import Optional
+
 from Graphics import RenderingPipeline
 from Graphics import PostProcessingChain
 from Graphics.PostEffects.InvertColors import InvertColors
@@ -81,7 +83,7 @@ class GameWindow(arcade.Window):
         self.bullet_list = arcade.SpriteList()
 
         # Read in the tiled map
-        map_name = ":resources:tmx_maps/map.tmx"
+        map_name = "arcade-resources/tmx_maps/map.tmx"
         my_map = arcade.tilemap.read_tmx(map_name)
         self.wall_list = arcade.tilemap.process_layer(
             my_map, "Platforms", SPRITE_SCALING_TILES
@@ -92,7 +94,7 @@ class GameWindow(arcade.Window):
 
         # Create player sprite
         self.player_sprite = arcade.Sprite(
-            ":resources:images/animated_characters/female_person/femalePerson_idle.png",
+            "arcade-resources/images/animated_characters/female_person/femalePerson_idle.png",
             SPRITE_SCALING_PLAYER,
         )
         # Set player location
