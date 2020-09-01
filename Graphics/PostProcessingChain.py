@@ -1,5 +1,7 @@
 import arcade
-from .RenderTarget import RenderTarget
+from Graphics.RenderTarget import RenderTarget
+import imgui
+import imgui.core
 
 class PostProcessingChain():
 
@@ -76,6 +78,16 @@ class PostProcessingChain():
         self.rt_ping = temp
         pass
 
+    def show_postprocess_ui(self):
+        imgui.begin("Post-Processing window", False)
+        imgui.text("Post-Processing Stages:")
+        imgui.separator()
+        for stage in self.chain:
+            if imgui.collapsing_header(type(stage).__name__, flags=imgui.TREE_NODE_DEFAULT_OPEN)[0]:
+                imgui.text('asdf')
+                #imgui.end()
+
+        imgui.end()
 
 
 class PostProcessingStage():
@@ -84,3 +96,6 @@ class PostProcessingStage():
 
     def apply(self, source, target, width, height):
         raise NotImplementedError("This method must be implemente by a derrived class")
+
+    def show_ui(self):
+        pass

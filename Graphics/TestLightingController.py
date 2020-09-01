@@ -4,6 +4,7 @@ from .RenderTarget import RenderTarget
 from .FullscreenQuad import FullscreenQuad
 from .PostProcessingChain import PostProcessingStage
 
+
 class TestLightingController():
 
 

@@ -12,6 +12,12 @@ from Graphics.PostEffects.Bloom import Bloom
 from Graphics.PostEffects.Tonemap import Tonemap
 from Graphics.PostEffects.SplitTone import SplitTone
 
+from arcade_imgui.arcadeimgui.integrations.arcade_renderer import ArcadeRenderer
+from Graphics.arcade_imgui_integration import ArcadeRenderer
+import pyglet
+import imgui
+import imgui.core
+
 SCREEN_TITLE = "PyMunk Platformer"
 
 # Size of screen to show, in pixels
@@ -27,7 +33,8 @@ class GameWindow(arcade.Window):
 
         # Init the parent class
         super().__init__(width, height, title)
-
+        imgui.create_context()
+        self.renderer = ArcadeRenderer(self)
 
     def setup(self):
         """ Set up everything with the game """
@@ -91,8 +98,18 @@ class GameWindow(arcade.Window):
         self.lighting.create_point_light((400,150),196, (0.0,0.0,2.0,1.0) )
 
 
+        self.show_postprocess_ui = True
+        self.show_imgui_test = False
+
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
+
+        if key == arcade.key.P:
+            self.show_postprocess_ui = not self.show_postprocess_ui
+
+        if key == arcade.key.I:
+            self.show_imgui_test = not self.show_imgui_test
+
         pass
 
     def on_key_release(self, key, modifiers):
@@ -117,10 +134,24 @@ class GameWindow(arcade.Window):
 
         self.render_pipeline.draw_frame()
 
+        self.on_draw_gui()
+
     def on_draw_game(self):
         self.bricks.draw()
         self.spriteList.draw()
         pass
+
+    def on_draw_gui(self):
+        imgui.new_frame()
+
+        if self.show_imgui_test:
+            imgui.show_test_window()
+        if self.show_postprocess_ui:
+            self.post_process.show_postprocess_ui()
+
+        imgui.end_frame()
+        imgui.render()       
+        self.renderer.render(imgui.get_draw_data())
 
 def main():
     """ Main method """

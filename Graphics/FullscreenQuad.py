@@ -17,7 +17,13 @@ class FullscreenQuad():
             1.0, 1.0,       1.0, 1.0
         ]
 
-        self.buffer = context.buffer(data=array('f', verticies))
+
+        datArray = array('f', verticies)
+
+        asBytes = bytes(datArray)
+
+        self.buffer = context.buffer(data=asBytes)
+
         self.buffer_description = arcade.gl.BufferDescription(self.buffer,
                                                         '2f 2f',
                                                         ['in_pos', 'in_uv'])
