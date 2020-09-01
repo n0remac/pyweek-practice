@@ -1,12 +1,13 @@
 
 import arcade
-from ..PostProcessingChain import PostProcessingStage
-from ..FullscreenQuad import FullscreenQuad
+from Graphics.PostProcessingChain import PostProcessingStage
+from Graphics.FullscreenQuad import FullscreenQuad
 
 #Basic tonemap from HDR -> LDR, currently via the simple Reinhard
 class Tonemap(PostProcessingStage):
 
     def __init__(self, context, white_point):
+        super().__init__()
         self.quad = FullscreenQuad(context)
         self.program = context.load_program(
             vertex_shader='Graphics/Shaders/fullscreen_quad.vs',

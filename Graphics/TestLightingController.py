@@ -106,7 +106,7 @@ class PointLight(Light):
 #class to apply lighting during post-processing
 class ApplyLightsInPost(PostProcessingStage):
     def __init__(self, context, light_controller):
-
+        super().__init__()
         self.light_controller = light_controller
 
         self.quad = FullscreenQuad(context)

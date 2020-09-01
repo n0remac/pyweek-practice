@@ -1,8 +1,8 @@
 
 import math
 import arcade
-from ..PostProcessingChain import PostProcessingStage
-from ..FullscreenQuad import FullscreenQuad
+from Graphics.PostProcessingChain import PostProcessingStage
+from Graphics.FullscreenQuad import FullscreenQuad
 
 #Basic Split tone shader with the following arguments:
 
@@ -14,6 +14,7 @@ from ..FullscreenQuad import FullscreenQuad
 class SplitTone(PostProcessingStage):
 
     def __init__(self, context):
+        super().__init__()
         self.quad = FullscreenQuad(context)
         self.program = context.load_program(
             vertex_shader='Graphics/Shaders/fullscreen_quad.vs',

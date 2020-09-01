@@ -11,6 +11,7 @@ class Bloom(PostProcessingStage):
     MAX_WEIGHTS = 15
 
     def __init__(self, context, taps=5, stdev=2.0, threshold=1.15, power = 1.0):
+        super().__init__()
         self.context = context
         self.quad = FullscreenQuad(context)
         self.extract_and_x_blur = context.load_program(

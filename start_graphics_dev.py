@@ -13,7 +13,6 @@ from Graphics.PostEffects.Tonemap import Tonemap
 from Graphics.PostEffects.SplitTone import SplitTone
 
 from arcade_imgui.arcadeimgui.integrations.arcade_renderer import ArcadeRenderer
-from Graphics.arcade_imgui_integration import ArcadeRenderer
 import pyglet
 import imgui
 import imgui.core

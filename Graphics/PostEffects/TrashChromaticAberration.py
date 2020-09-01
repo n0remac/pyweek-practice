@@ -6,6 +6,7 @@ from ..FullscreenQuad import FullscreenQuad
 class TrashChromaticAberration(PostProcessingStage):
 
     def __init__(self, context, strength):
+        super().__init__()
         self.quad = FullscreenQuad(context)
         self.program = context.load_program(
             vertex_shader='Graphics/Shaders/fullscreen_quad.vs',

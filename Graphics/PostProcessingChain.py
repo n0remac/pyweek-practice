@@ -49,18 +49,31 @@ class PostProcessingChain():
     def apply_chain(self, source):
 
 
+        #count enabled stages
+        enabled = 0
+        for stage in self.chain:
+            if stage.is_enabled:
+                enabled+=1
 
-        #handle the special case of no stages
-        if len(self.chain) == 0:
+        #handle the special case of no stages, or no stages enabled
+        if enabled == 0:
             return source
-
-        #handle the special case of the first chain stage tha reads directly from the 
-        #input texture instead of the ping buffer
-        self.__apply_stage(self.chain[0], source, self.rt_pong)
+  
+        #used to handle the combination of is_enabled and needing to pass source to the first stage in the chain
+        has_used_source = False
 
         #Skip first element in chain as it was applied above
-        for x in self.chain[1:]:
-            self.__apply_stage(x, self.rt_ping, self.rt_pong)
+        for x in self.chain:
+            if not x.is_enabled:
+                continue
+
+            if has_used_source:
+                #if source has been used, proceed with ping pong
+                self.__apply_stage(x, self.rt_ping, self.rt_pong)
+            else:
+                #else use source and mark it as used
+                self.__apply_stage(x, source, self.rt_pong)
+                has_used_source = True
 
         #All writes go to rt_pong, but we flip the buffers after applying a stage
         #So rt_ping ends up with the final iamge
@@ -82,20 +95,22 @@ class PostProcessingChain():
         imgui.begin("Post-Processing window", False)
         imgui.text("Post-Processing Stages:")
         imgui.separator()
+
+        index = 0
         for stage in self.chain:
             if imgui.collapsing_header(type(stage).__name__, flags=imgui.TREE_NODE_DEFAULT_OPEN)[0]:
-                imgui.text('asdf')
-                #imgui.end()
+                stage.show_ui(index)
+                index += 1
 
         imgui.end()
 
 
 class PostProcessingStage():
     def __init__(self):
-        pass
+        self.is_enabled = True
 
     def apply(self, source, target, width, height):
         raise NotImplementedError("This method must be implemente by a derrived class")
 
-    def show_ui(self):
-        pass
+    def show_ui(self,index):
+        _, self.is_enabled = imgui.checkbox('Enable##' + str(index), self.is_enabled)
