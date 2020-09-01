@@ -96,21 +96,21 @@ class PostProcessingChain():
         imgui.text("Post-Processing Stages:")
         imgui.separator()
 
-        index = 0
         for stage in self.chain:
             if imgui.collapsing_header(type(stage).__name__, flags=imgui.TREE_NODE_DEFAULT_OPEN)[0]:
-                stage.show_ui(index)
-                index += 1
+                stage.show_ui()
 
         imgui.end()
 
 
 class PostProcessingStage():
+    next_ui_index = 0
     def __init__(self):
         self.is_enabled = True
-
+        self.ui_index = PostProcessingStage.next_ui_index
+        PostProcessingStage.next_ui_index += 1
     def apply(self, source, target, width, height):
         raise NotImplementedError("This method must be implemente by a derrived class")
 
-    def show_ui(self,index):
-        _, self.is_enabled = imgui.checkbox('Enable##' + str(index), self.is_enabled)
+    def show_ui(self):
+        _, self.is_enabled = imgui.checkbox(f'Enable##{self.ui_index}'.format(self.ui_index), self.is_enabled)

@@ -7,7 +7,7 @@ in vec2 v_uv;
 out vec4 fragColor;
 
 uniform int u_weight_count;
-uniform float u_weights[15];
+uniform float u_weights[45];
 
 uniform float u_power;
 

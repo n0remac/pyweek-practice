@@ -3,6 +3,8 @@ import math
 import arcade
 from Graphics.PostProcessingChain import PostProcessingStage
 from Graphics.FullscreenQuad import FullscreenQuad
+import imgui
+import imgui.core
 
 #Basic Split tone shader with the following arguments:
 
@@ -70,3 +72,11 @@ class SplitTone(PostProcessingStage):
         source.bind_as_texture(0)
 
         self.quad.render(self.program)
+
+    def show_ui(self):
+        super().show_ui()
+        self.threshold = imgui.slider_float(f'Threshold##{self.ui_index}', self.threshold, 0.0, 10.0)[1]
+        self.crossover = imgui.slider_float(f'Crossover##{self.ui_index}', self.crossover, 0.0, 2.0)[1]
+        self.shadow_color = imgui.color_edit3(f'Shadow Color##{self.ui_index}', *self.shadow_color)[1]
+        self.highlight_color = imgui.color_edit3(f'Highlight Color##{self.ui_index}', *self.highlight_color)[1]
+       

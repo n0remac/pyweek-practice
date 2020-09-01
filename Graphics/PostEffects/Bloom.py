@@ -1,17 +1,23 @@
 import math
 import arcade
-from ..PostProcessingChain import PostProcessingStage
-from ..FullscreenQuad import FullscreenQuad
-from ..RenderTarget import RenderTarget
-
+from Graphics.PostProcessingChain import PostProcessingStage
+from Graphics.FullscreenQuad import FullscreenQuad
+from Graphics.RenderTarget import RenderTarget
+import imgui
 #Basic bloom shader
 class Bloom(PostProcessingStage):
 
     #Must match shader
-    MAX_WEIGHTS = 15
+    MAX_WEIGHTS = 45
 
     def __init__(self, context, taps=5, stdev=2.0, threshold=1.15, power = 1.0):
         super().__init__()
+
+        self._threshold = 0
+        self._power = 0
+        self._taps = 1 
+        self._stdev = 1.0
+
         self.context = context
         self.quad = FullscreenQuad(context)
         self.extract_and_x_blur = context.load_program(
@@ -24,12 +30,22 @@ class Bloom(PostProcessingStage):
             fragment_shader='Graphics/Shaders/bloom_yblur_combine.fs'
         )
 
+        #Both need source, only combine needs xblur (self.tempTarget)
+        self.extract_and_x_blur['t_source'] = 0
+        self.y_blur_and_combine['t_source'] = 0
+        self.y_blur_and_combine['t_xblur'] = 1
+
         self.blurTarget = None
         self.weights = [0.1] * (self.MAX_WEIGHTS )
 
-        self.change_settings(taps,stdev, threshold, power)
+        self.threshold = threshold
+        self.power = power
+        self.taps = taps
+        self.stdev = stdev
 
-    def change_settings(self, taps, stdev, threshold, power):
+        self.change_weights(taps,stdev)
+
+    def change_weights(self, taps, stdev):
         if taps < 1:
             taps = 1
         if taps > self.MAX_WEIGHTS:
@@ -56,14 +72,7 @@ class Bloom(PostProcessingStage):
         self.extract_and_x_blur['u_weight_count'] = taps
         self.y_blur_and_combine['u_weight_count'] = taps
 
-        #Threshold only needed for extract, power only needed for combine
-        self.extract_and_x_blur['u_threshold'] = threshold
-        self.y_blur_and_combine['u_power'] = power
 
-        #Both need source, only combine needs xblur (self.tempTarget)
-        self.extract_and_x_blur['t_source'] = 0
-        self.y_blur_and_combine['t_source'] = 0
-        self.y_blur_and_combine['t_xblur'] = 1
 
     def apply(self, source, target, width, height):
         
@@ -99,3 +108,51 @@ class Bloom(PostProcessingStage):
         target.bind_as_framebuffer()
         self.blurTarget.bind_as_texture(1)
         self.quad.render(self.y_blur_and_combine)
+
+    @property
+    def threshold(self):
+        return self._threshold
+
+    @threshold.setter
+    def threshold(self,value):
+        self._threshold = max(0.0,value)
+        self.extract_and_x_blur['u_threshold'] = self._threshold
+
+    @property
+    def power(self):
+        return self._power
+
+    @power.setter
+    def power(self,value):
+        self._power = value
+        self.y_blur_and_combine['u_power'] = value
+
+    @property
+    def taps(self):
+        return self._taps
+
+    @taps.setter
+    def taps(self, value):
+        self._taps = value
+        #Ensure odd
+        if self._taps % 2 == 0:
+            self._taps += 1
+        self.change_weights(self._taps, self._stdev)
+
+    @property
+    def stdev(self):
+        return self._stdev
+
+    @stdev.setter
+    def stdev(self, value):
+        self._stdev = value
+        self.change_weights(self._taps, self._stdev)
+
+    def show_ui(self):
+        super().show_ui()
+        self.threshold = imgui.slider_float(f'Threshold##{self.ui_index}', self.threshold, 0.0, 32.0, power=2.0)[1]
+        self.power = imgui.slider_float(f'Power##{self.ui_index}', self.power, 0.0, 3.0)[1]
+        self.taps = imgui.slider_int(f'Bloom Samples##{self.ui_index}', self.taps, 1, self.MAX_WEIGHTS)[1]       
+        self.stdev = imgui.slider_float(f'Blur Radius##{self.ui_index}', self.stdev, 0.0, 10.0)[1]
+        if imgui.small_button(f'Compute radius from Samples##{self.ui_index}'):
+            self.stdev = self._taps / 6.0
