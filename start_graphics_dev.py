@@ -116,7 +116,6 @@ class GameWindow(arcade.Window):
         #self.render_pipeline.debug_rt = self.lighting.light_buffer
 
         self.render_pipeline.draw_frame()
-        print(self.ctx.projection_2d_matrix)
 
     def on_draw_game(self):
         self.bricks.draw()
