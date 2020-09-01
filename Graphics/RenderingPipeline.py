@@ -2,7 +2,8 @@ import arcade
 from .FullscreenQuad import FullscreenQuad
 from .RenderTarget import RenderTarget
 
-class RenderingPipeline():
+
+class RenderingPipeline:
 
     def resize_render_pipeline(self, width, height):
 
@@ -23,7 +24,6 @@ class RenderingPipeline():
 
         if self.post_processing_chain is not None:
             self.post_processing_chain.resize_chain(width,height)       
-
 
     def __init__(self, window, width, height):
 
