@@ -6,21 +6,14 @@ from Constants.Game import SPRITE_SCALING_TILES, SPRITE_SCALING_PLAYER, SPRITE_S
 
 
 class GameResources:
+	"""
+	In theory, this should be the place where you load in resources that the game uses via Arcade's various APIs.
+	Currently a grab bag of Arcade resources that get stored, updated, and rendered.
+	Unfortunately Arcade doesn't support an immutable API for stuff (probably for simplicity), so have to live with
+	mutating the locations of sprite instances to move them around. Oh well!
+	"""
 
 	def __init__(self):
-
-		# Player sprite
-		self.player_sprite: Optional[arcade.Sprite] = None
-		self.hello: Optional[arcade.Sprite] = None
-
-		# Sprite lists we need
-		self.player_list: Optional[arcade.SpriteList] = None
-		self.wall_list: Optional[arcade.SpriteList] = None
-		self.bullet_list: Optional[arcade.SpriteList] = None
-		self.item_list: Optional[arcade.SpriteList] = None
-		self.sprite_list: Optional[arcade.SpriteList] = None
-
-	def setup(self):
 
 		self.hello = arcade.Sprite("Graphics/hello_world.png")
 		self.hello.scale = 0.25
@@ -55,6 +48,8 @@ class GameResources:
 		# Add to player sprite list
 		self.player_list.append(self.player_sprite)
 
+		self.sprite_list.append(self.hello)
+
 	def on_mouse_motion(self, x, y, dx, dy):
 		self.hello.center_x = x
 		self.hello.center_y = y
@@ -68,3 +63,5 @@ class GameResources:
 	def on_draw_game(self):
 		self.sprite_list.draw()
 
+	def on_update(self, delta_time):
+		pass
