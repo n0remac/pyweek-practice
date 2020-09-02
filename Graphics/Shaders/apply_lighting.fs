@@ -18,9 +18,5 @@ void main() {
     //Compute final HDR light color
     vec4 hdrColor = sourceColor * lightColor;//TODO:Do we need to do 1/PI for albedo in this context?
 
-    //Tonemap to LDR //TODO:Move this after some bloom for extra spice
-    //Reinhard tonemapping, basic but works good enough for this
-    vec4 ldrColor = hdrColor / (1.0 + hdrColor);
-
-    fragColor = ldrColor;
+    fragColor = hdrColor;
 }

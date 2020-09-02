@@ -22,8 +22,8 @@ class PostProcessingChain():
         if self.rt_pong is not None:
             self.rt_pong.release()
         
-        self.rt_ping = RenderTarget(self.context, width, height)
-        self.rt_pong = RenderTarget(self.context, width, height)
+        self.rt_ping = RenderTarget(self.context, width, height, 'f2')
+        self.rt_pong = RenderTarget(self.context, width, height, 'f2')
 
         self.width = width
         self.height = height

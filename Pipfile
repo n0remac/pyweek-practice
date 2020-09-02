@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-arcade = "*"
+arcade = {editable = true, git = "https://github.com/64-bit/arcade.git", ref = "uniform_array_fix"}
 
 [requires]
 python_version = "3.7"

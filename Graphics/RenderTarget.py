@@ -13,7 +13,9 @@ class RenderTarget():
         self.framebuffer_target_texture = context.texture(
             (width,height),
             components=4,
-            dtype=data_type)
+            dtype=data_type,
+            wrap_x=context.CLAMP_TO_EDGE ,
+            wrap_y=context.CLAMP_TO_EDGE )
 
         #Create a framebuffer object with that texture to render to
         self.framebuffer = context.framebuffer(color_attachments=[self.framebuffer_target_texture])
