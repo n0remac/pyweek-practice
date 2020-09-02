@@ -83,19 +83,11 @@ class Bloom(PostProcessingStage):
         #If you seperate the 2 axis of a gaussian blur you only have to do N+N texture reads instead of N*N
         #Interstingly enough, a non-separated blur in a bloom shader was how I met Free, go figure.
         if self.blurTarget is None:
-            self.blurTarget = RenderTarget(self.context, width, height, 'f2')
-            #update sizes if target changes
-            pixelSizes = (1.0 / width, 1.0 / height)
-            self.extract_and_x_blur['u_pixel_size_uv'] = pixelSizes
-            self.y_blur_and_combine['u_pixel_size_uv'] = pixelSizes
+            self.allocate_new_rendertarget(width,height)
 
         elif (self.blurTarget.width != width or self.blurTarget.height != height):
             self.blurTarget.release()
-            self.blurTarget = RenderTarget(self.context, width, height, 'f2')
-            #update sizes if target changes
-            pixelSizes = (1.0 / width, 1.0 / height)
-            self.extract_and_x_blur['u_pixel_size_uv'] = pixelSizes
-            self.y_blur_and_combine['u_pixel_size_uv'] = pixelSizes
+            self.allocate_new_rendertarget(width,height)
 
         #bind source to zero, this never moves
         source.bind_as_texture(0)
@@ -108,6 +100,13 @@ class Bloom(PostProcessingStage):
         target.bind_as_framebuffer()
         self.blurTarget.bind_as_texture(1)
         self.quad.render(self.y_blur_and_combine)
+
+    def allocate_new_rendertarget(self, width, height):
+        self.blurTarget = RenderTarget(self.context, width, height, 'f2')
+        #update sizes if target changes
+        pixelSizes = (1.0 / width, 1.0 / height)
+        self.extract_and_x_blur['u_pixel_size_uv'] = pixelSizes
+        self.y_blur_and_combine['u_pixel_size_uv'] = pixelSizes
 
     @property
     def threshold(self):
