@@ -1,7 +1,7 @@
 
 import arcade
-from ..PostProcessingChain import PostProcessingStage
-from ..FullscreenQuad import FullscreenQuad
+from Graphics.PostProcessingChain import PostProcessingStage
+from Graphics.FullscreenQuad import FullscreenQuad
 
 class TrashChromaticAberration(PostProcessingStage):
 

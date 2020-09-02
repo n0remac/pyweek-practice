@@ -1,8 +1,8 @@
 
 import arcade
-from .RenderTarget import RenderTarget
-from .FullscreenQuad import FullscreenQuad
-from .PostProcessingChain import PostProcessingStage
+from Graphics.RenderTarget import RenderTarget
+from Graphics.FullscreenQuad import FullscreenQuad
+from Graphics.PostProcessingChain import PostProcessingStage
 
 
 class TestLightingController():
