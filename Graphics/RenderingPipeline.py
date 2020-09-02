@@ -1,6 +1,6 @@
 import arcade
 from Graphics.FullscreenQuad import FullscreenQuad
-from Grahpics.RenderTarget import RenderTarget
+from Graphics.RenderTarget import RenderTarget
 
 
 class RenderingPipeline:
