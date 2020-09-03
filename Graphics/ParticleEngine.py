@@ -70,15 +70,15 @@ class ParticleEngine():
 
 
     def get_particles(self):
-        for i in range(5000000):
+        for i in range(1000000):
             yield 1920.0 / 2.0
             yield 1080.0 / 2.0
 
             yield 1.0
             yield 2.0
 
-            yield random.uniform(-1.0,1.0) * 200.0
-            yield random.uniform(-1.0,1.0) * 200.0
+            yield 0.0
+            yield 0.0
 
             yield 0.1
             yield 0.4

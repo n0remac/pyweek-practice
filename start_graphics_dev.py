@@ -43,7 +43,7 @@ class GameWindow(arcade.Window):
 
         self.render_pipeline = RenderingPipeline.RenderingPipeline(self, windowSize[0], windowSize[1])
         self.render_pipeline.on_draw_frame = self.on_draw_game
-        self.render_pipeline.background_color = (0.1,0.1,0.1,1.0)
+        self.render_pipeline.background_color = (0.0,0.0,0.0,1.0)
 
         self.post_process = PostProcessingChain.PostProcessingChain(self.ctx, windowSize[0], windowSize[1])
         self.render_pipeline.post_processing_chain = self.post_process
@@ -112,6 +112,9 @@ class GameWindow(arcade.Window):
         if key == arcade.key.I:
             self.show_imgui_test = not self.show_imgui_test
 
+        if key == arcade.key.SPACE:
+            self.particles.test_burst(SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0)
+
         pass
 
     def on_key_release(self, key, modifiers):
@@ -126,7 +129,8 @@ class GameWindow(arcade.Window):
         self.particles.mouse_pos = (x,y)
 
     def on_mouse_press(self, x, y, button, modifers):
-        self.particles.test_burst(x,y)
+        pass
+    
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -143,7 +147,7 @@ class GameWindow(arcade.Window):
         self.on_draw_gui()
 
     def on_draw_game(self):
-        self.bricks.draw()
+        #self.bricks.draw()
         self.spriteList.draw()
 
         self.particles.render(0.01666666)
