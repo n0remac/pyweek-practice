@@ -17,7 +17,7 @@ class RenderingPipeline:
             self.render_target.release()
             self.render_target = None
 
-        self.render_target = RenderTarget(self.context, width, height)
+        self.render_target = RenderTarget(self.context, width, height, 'f2')
 
         self.render_width = width
         self.render_height = height

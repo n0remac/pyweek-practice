@@ -5,6 +5,7 @@ import arcade
 from Graphics import RenderingPipeline
 from Graphics import PostProcessingChain
 from Graphics.TestLightingController import TestLightingController
+from Graphics.ParticleEngine import ParticleEngine
 
 from Graphics.PostEffects.InvertColors import InvertColors
 from Graphics.PostEffects.TrashChromaticAberration import TrashChromaticAberration
@@ -20,8 +21,8 @@ import imgui.core
 SCREEN_TITLE = "PyMunk Platformer"
 
 # Size of screen to show, in pixels
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 
 
 class GameWindow(arcade.Window):
@@ -51,10 +52,12 @@ class GameWindow(arcade.Window):
         self.lighting = TestLightingController(self.ctx)
         self.lighting.ambient_light = (0.1,0.1,0.1,1.0)
         #Make sure to add the lighting post processing as the first stage
-        self.post_process.add_stage(self.lighting.get_apply_light_stage())
+        #self.post_process.add_stage(self.lighting.get_apply_light_stage())
 
         #add other nonsense because why not
         #self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
+
+        self.particles = ParticleEngine(self.ctx)
 
         #add some bloom
         self.bloom = Bloom(self.ctx, 15, 3.0, 2.0, 1.0)
@@ -70,7 +73,7 @@ class GameWindow(arcade.Window):
         self.split_tone.shadow_color = (0.0, 0.1, 0.0)
         self.split_tone.highlight_color = (0.0, 0.0, 0.1)
 
-        self.post_process.add_stage(self.split_tone)
+        #self.post_process.add_stage(self.split_tone)
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()
@@ -120,6 +123,10 @@ class GameWindow(arcade.Window):
         self.hello.center_y = y
 
         self.lightA.position = (x,y)
+        self.particles.mouse_pos = (x,y)
+
+    def on_mouse_press(self, x, y, button, modifers):
+        self.particles.test_burst(x,y)
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -138,6 +145,8 @@ class GameWindow(arcade.Window):
     def on_draw_game(self):
         self.bricks.draw()
         self.spriteList.draw()
+
+        self.particles.render(0.01666666)
         pass
 
     def on_draw_gui(self):
