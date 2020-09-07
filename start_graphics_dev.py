@@ -11,6 +11,7 @@ from Graphics.PostEffects.TrashChromaticAberration import TrashChromaticAberrati
 from Graphics.PostEffects.Bloom import Bloom
 from Graphics.PostEffects.Tonemap import Tonemap
 from Graphics.PostEffects.SplitTone import SplitTone
+from Graphics.PostEffects.Vignette import Vignette
 
 from arcade_imgui.arcadeimgui.integrations.arcade_renderer import ArcadeRenderer
 import pyglet
@@ -20,8 +21,8 @@ import imgui.core
 SCREEN_TITLE = "PyMunk Platformer"
 
 # Size of screen to show, in pixels
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 
 
 class GameWindow(arcade.Window):
@@ -71,6 +72,9 @@ class GameWindow(arcade.Window):
         self.split_tone.highlight_color = (0.0, 0.0, 0.1)
 
         self.post_process.add_stage(self.split_tone)
+
+        self.vignette = Vignette(self.ctx)
+        self.post_process.add_stage(self.vignette)
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()
