@@ -19,6 +19,7 @@ class Vignette(PostProcessingStage):
         self.end_distance = 1.5
         self.strength = 1.0
         self.scale = (1.0, 1.0)
+        self.color = (0.0,0.0,0.0)
 
     def apply(self, source, target, width, height):
         
@@ -63,6 +64,15 @@ class Vignette(PostProcessingStage):
         self._scale = value
         self.program['u_scale'] = value
 
+    @property
+    def color(self):
+        return self._color
+
+    @color.setter
+    def color(self,value):
+        self._color =value
+        self.program['u_color'] = value
+
     def show_ui(self):
         super().show_ui()
 
@@ -70,3 +80,5 @@ class Vignette(PostProcessingStage):
         self.end_distance = imgui.slider_float(f'End Distance##{self.ui_index}', self.end_distance, -1.0, 3.0)[1]
         self.strength = imgui.slider_float(f'Strength##{self.ui_index}', self.strength, 0.0, 2.0)[1]
         self.scale = imgui.slider_float2(f'Scale##{self.ui_index}', self._scale[0], self._scale[1], 0.0,4.0)[1]
+
+        self.color = imgui.color_edit3(f'Color##{self.ui_index}', *self.color)[1]

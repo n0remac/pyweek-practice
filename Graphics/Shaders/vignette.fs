@@ -14,6 +14,8 @@ uniform float u_strength;
 
 uniform vec2 u_scale;
 
+uniform vec3 u_color;
+
 
 float saturate(float value){
     return clamp(value, 0.0, 1.0);
@@ -25,7 +27,7 @@ vec4 saturate(vec4 color){
 
 void main() {
 
-    vec4 sourceColor = texture(t_source, v_uv);
+    vec3 sourceColor = texture(t_source, v_uv).rgb;
 
     float fromCenter = length(u_scale * ((v_uv - 0.5f) * 2.0));
 
@@ -33,5 +35,5 @@ void main() {
 
     strength = saturate(strength * u_strength);
 
-    fragColor = mix(sourceColor, vec4(0.0), strength);
+    fragColor = vec4( mix(sourceColor, u_color, strength), 1.0);
 }
