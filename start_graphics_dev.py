@@ -12,6 +12,7 @@ from Graphics.PostEffects.Bloom import Bloom
 from Graphics.PostEffects.Tonemap import Tonemap
 from Graphics.PostEffects.SplitTone import SplitTone
 from Graphics.PostEffects.Vignette import Vignette
+from Graphics.PostEffects.GoodChromaticAberration import GoodChromaticAberration
 
 from arcade_imgui.arcadeimgui.integrations.arcade_renderer import ArcadeRenderer
 import pyglet
@@ -51,18 +52,14 @@ class GameWindow(arcade.Window):
         #Create lighting controller
         self.lighting = TestLightingController(self.ctx)
         self.lighting.ambient_light = (0.1,0.1,0.1,1.0)
-        #Make sure to add the lighting post processing as the first stage
-        self.post_process.add_stage(self.lighting.get_apply_light_stage())
 
         #add other nonsense because why not
         #self.post_process.add_stage(TrashChromaticAberration(self.ctx, 0.005))
 
         #add some bloom
         self.bloom = Bloom(self.ctx, 15, 3.0, 2.0, 1.0)
-        self.post_process.add_stage(self.bloom)
 
         #Add a tonemap stage after the bloom
-        self.post_process.add_stage(Tonemap(self.ctx, 1.5))
 
         #Add a split tone stage after the bloom
         self.split_tone = SplitTone(self.ctx)
@@ -71,10 +68,7 @@ class GameWindow(arcade.Window):
         self.split_tone.shadow_color = (0.0, 0.1, 0.0)
         self.split_tone.highlight_color = (0.0, 0.0, 0.1)
 
-        self.post_process.add_stage(self.split_tone)
-
         self.vignette = Vignette(self.ctx)
-        self.post_process.add_stage(self.vignette)
 
         self.hello = arcade.Sprite('Graphics/hello_world.png')
         self.spriteList = arcade.SpriteList()
@@ -103,6 +97,20 @@ class GameWindow(arcade.Window):
 
         self.show_postprocess_ui = True
         self.show_imgui_test = False
+
+        self.goodAberr = GoodChromaticAberration(self.ctx)
+
+        #Build post-process chain in one spot for easier toggeling
+
+        #Make sure to add the lighting post processing as the first stage
+        #self.post_process.add_stage(self.lighting.get_apply_light_stage())
+
+        #self.post_process.add_stage(self.bloom)
+        #self.post_process.add_stage(Tonemap(self.ctx, 1.5))
+        #self.post_process.add_stage(self.split_tone)
+        #self.post_process.add_stage(self.vignette)
+        self.post_process.add_stage(self.goodAberr)
+
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
