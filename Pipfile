@@ -7,10 +7,9 @@ verify_ssl = true
 
 [packages]
 arcade = {editable = true, git = "https://github.com/64-bit/arcade.git", ref = "uniform_array_fix"}
-
 imgui = "1.1.0"
 PyOpenGL = "3.1.5"
-
+pillow = "*"
 
 [requires]
 python_version = "3.7"

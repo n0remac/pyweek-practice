@@ -13,6 +13,7 @@ from Graphics.PostEffects.Tonemap import Tonemap
 from Graphics.PostEffects.SplitTone import SplitTone
 from Graphics.PostEffects.Vignette import Vignette
 from Graphics.PostEffects.GoodChromaticAberration import GoodChromaticAberration
+from Graphics.PostEffects.ColorGrading import ColorGrading
 
 from arcade_imgui.arcadeimgui.integrations.arcade_renderer import ArcadeRenderer
 import pyglet
@@ -39,6 +40,10 @@ class GameWindow(arcade.Window):
 
     def setup(self):
         """ Set up everything with the game """
+
+        cg = ColorGrading(self.ctx)
+        cg.write_default_lut('./lut.png')
+
 
         windowSize = self.get_size()
 
