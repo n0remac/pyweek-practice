@@ -62,7 +62,7 @@ class GameWindow(arcade.Window):
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
-        self.game_instance.on_key_release(key, modifiers)
+        self.game_instance.on_key_press(key, modifiers)
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """

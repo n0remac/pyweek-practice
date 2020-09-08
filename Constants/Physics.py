@@ -18,3 +18,6 @@ PLAYER_MASS = 2.0
 # Keep player from going too fast
 PLAYER_MAX_HORIZONTAL_SPEED = 450
 PLAYER_MAX_VERTICAL_SPEED = 1600
+
+# Force applied while on the ground
+PLAYER_MOVE_FORCE_ON_GROUND = 8000
