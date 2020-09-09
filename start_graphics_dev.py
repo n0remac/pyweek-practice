@@ -41,9 +41,6 @@ class GameWindow(arcade.Window):
     def setup(self):
         """ Set up everything with the game """
 
-        cg = ColorGrading(self.ctx)
-        cg.write_default_lut('./lut.png')
-
 
         windowSize = self.get_size()
 
@@ -105,6 +102,12 @@ class GameWindow(arcade.Window):
 
         self.goodAberr = GoodChromaticAberration(self.ctx)
 
+        self.color_grading = ColorGrading(self.ctx)
+        
+        self.cgt = arcade.load_texture("./lut_cold.png")
+        self.color_grading.set_texture(self.cgt)
+
+
         #Build post-process chain in one spot for easier toggeling
 
         #Make sure to add the lighting post processing as the first stage
@@ -115,6 +118,8 @@ class GameWindow(arcade.Window):
         #self.post_process.add_stage(self.split_tone)
         #self.post_process.add_stage(self.vignette)
         self.post_process.add_stage(self.goodAberr)
+
+        self.post_process.add_stage(self.color_grading)
 
 
     def on_key_press(self, key, modifiers):
