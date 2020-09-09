@@ -21,3 +21,9 @@ PLAYER_MAX_VERTICAL_SPEED = 1600
 
 # Force applied while on the ground
 PLAYER_MOVE_FORCE_ON_GROUND = 8000
+
+# Force applied when moving left/right in the air
+PLAYER_MOVE_FORCE_IN_AIR = 900
+
+# Strength of a jump
+PLAYER_JUMP_IMPULSE = 1800
