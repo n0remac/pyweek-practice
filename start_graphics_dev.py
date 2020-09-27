@@ -14,6 +14,7 @@ from Graphics.PostEffects.SplitTone import SplitTone
 from Graphics.PostEffects.Vignette import Vignette
 from Graphics.PostEffects.GoodChromaticAberration import GoodChromaticAberration
 from Graphics.PostEffects.ColorGrading import ColorGrading
+from Graphics.PostEffects.GreyScale import GreyScale
 
 from arcade_imgui.arcadeimgui.integrations.arcade_renderer import ArcadeRenderer
 import pyglet
@@ -107,19 +108,22 @@ class GameWindow(arcade.Window):
         self.cgt = arcade.load_texture("./lut_cold.png")
         self.color_grading.set_texture(self.cgt)
 
+        self.grey_scale = GreyScale(self.ctx)
+
 
         #Build post-process chain in one spot for easier toggeling
 
         #Make sure to add the lighting post processing as the first stage
-        #self.post_process.add_stage(self.lighting.get_apply_light_stage())
+        self.post_process.add_stage(self.lighting.get_apply_light_stage())
 
-        #self.post_process.add_stage(self.bloom)
-        #self.post_process.add_stage(Tonemap(self.ctx, 1.5))
-        #self.post_process.add_stage(self.split_tone)
-        #self.post_process.add_stage(self.vignette)
+        self.post_process.add_stage(self.bloom)
+        self.post_process.add_stage(Tonemap(self.ctx, 1.5))
+        self.post_process.add_stage(self.split_tone)
+        self.post_process.add_stage(self.vignette)
         self.post_process.add_stage(self.goodAberr)
 
         self.post_process.add_stage(self.color_grading)
+        self.post_process.add_stage(self.grey_scale)
 
 
     def on_key_press(self, key, modifiers):
